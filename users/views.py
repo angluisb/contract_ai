@@ -1,17 +1,33 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
+
+from .forms import  UserRegisterForm
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login,logout
 
 # Create your views here.
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('upload_contract')
+            return redirect('home')
     else:
-        form = UserCreationForm()
-        context = {'form': form}
-    return render(request, "users/register.html",context)
+        form = UserRegisterForm()
+
+    return render(request, "users/register.html",{'form': form})
+
+@login_required
+def home(request):
+    user = request.user
+    context = {'user': user}
+    return render(request,"users/home.html", context)
+
+def logout_view(request):
+        logout(request)
+        messages.success(request, f'You have been logged out!')
+        return redirect('login')
+
 

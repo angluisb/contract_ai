@@ -21,6 +21,6 @@ urlpatterns = [
     #path('', include('ai_analysis.urls')),
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-    #path('contracts/', include('contracts.urls')),
+    path('contracts/', include('contracts.urls')),
     #path('api/', include('api.urls'))
 ]

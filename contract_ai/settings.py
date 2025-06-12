@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -70,12 +70,16 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.User'
+
+
+
 WSGI_APPLICATION = 'contract_ai.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+load_dotenv()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -120,7 +124,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/contracts/upload/'  # A dónde va después de loguearse
+LOGIN_REDIRECT_URL = '/'  # A dónde va después de loguearse
 LOGOUT_REDIRECT_URL = '/login/'            # A dónde va después de desloguearse
 LOGIN_URL = '/login/'                      # Redirección si no está autenticado
 
