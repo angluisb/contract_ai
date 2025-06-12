@@ -20,7 +20,7 @@ def register(request):
     return render(request, "users/register.html",{'form': form})
 
 def home(request):
-    if not request.user.is_authenticated:
+    if  request.user.is_authenticated:
         user = request.user
         context = {'user': user}
     else:
