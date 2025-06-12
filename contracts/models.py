@@ -3,10 +3,14 @@ from django.db import models
 from users.models import User
 # Create your models here.
 
+def contract_upload_path(instance, filename):
+    """Función para definir la ruta de subida de contratos"""
+    return f"contracts/{instance.user.username}/{filename}"
+
 class Contract(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     original_filename = models.CharField(max_length=255, blank=True)
-    file = models.FileField(upload_to='contracts/', validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    file = models.FileField(upload_to= contract_upload_path, validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
     upload_at = models.DateTimeField(auto_now_add=True)
     extracted_text = models.TextField(blank=True)
     analysis_result = models.TextField(blank=True)
