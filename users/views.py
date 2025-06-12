@@ -19,10 +19,13 @@ def register(request):
 
     return render(request, "users/register.html",{'form': form})
 
-@login_required
 def home(request):
-    user = request.user
-    context = {'user': user}
+    if not request.user.is_authenticated:
+        user = request.user
+        context = {'user': user}
+    else:
+        user = "Unknown"
+        context = {'user': user}
     return render(request,"users/home.html", context)
 
 def logout_view(request):
