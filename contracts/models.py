@@ -10,7 +10,7 @@ def contract_upload_path(instance, filename):
 class Contract(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     original_filename = models.CharField(max_length=255, blank=True)
-    file = models.FileField(upload_to= contract_upload_path, validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    file = models.FileField(upload_to= contract_upload_path, validators=[FileExtensionValidator(allowed_extensions=['pdf','docx'])])
     upload_at = models.DateTimeField(auto_now_add=True)
     extracted_text = models.TextField(blank=True)
     analysis_result = models.TextField(blank=True)

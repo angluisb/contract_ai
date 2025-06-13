@@ -1,7 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from setuptools.command.bdist_egg import analyze_egg
+
 from contracts.forms import ContractForm
+from .models import Contract
+from ai_analysis.utils import extract_text_from_file, analyze_contract_text
 
 
 # Create your views here.
@@ -23,5 +27,16 @@ def upload_contract(request):
     return render(request, 'contracts/upload.html', {'form': form})
 
 @login_required()
-def contract_details(request):
-    pass
+def contract_details(request, pk):
+    contract = get_object_or_404(Contract, pk=pk, user = request.user)
+
+    if not contract.extracted_text:
+       contract.extracted_text = extract_text_from_file(contract.file)
+       contract.save()
+
+    if not contract.analysis_result and contract.extracted_text:
+        contract.analysis_result = analyze_contract_text(contract.extracted_text)
+        contract.save()
+
+
+    return render(request, 'contracts/detail.html', {'contract': contract})
