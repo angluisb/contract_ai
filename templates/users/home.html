@@ -1,13 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <a href="{% url 'logout' %}" class="btn btn-outline-secondary">
-    Cerrar Sesión
-</a>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}" />
     <title>Hi</title>
 </head>
 <body>
-<h1>Hola {{ user.username }}</h1>
+    <div class="container">
+        {% if user.is_authenticated %}
+            <div class="nav">
+                <div class="nav-der">
+                    <a href="{% url 'logout' %}" class="a-nav">Logout</a>
+                </div>
+                <div class="nav-izq">
+                    <ul class="nav-links">
+                    <li><a href="{% url 'upload_contract' %}" class="a-nav">Subir contrato</a></li>
+                    </ul>
+                </div>
+        {% else %}
+        {% endif %}
+            </div>
+
+
+        <div class="message">
+        <h1>Hola {{ user.username }}</h1>
+        </div>
+    </div>
+
 </body>
 </html>

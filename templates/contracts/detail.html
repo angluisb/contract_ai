@@ -1,7 +1,17 @@
-<h2>Resultado del análisis</h2>
+<h2>Análisis automático del contrato</h2>
+<p>{{ contract.analysis_result }}</p>
 
-<h3>Texto extraído:</h3>
-<pre>{{ contract.extracted_text }}</pre>
+<h3>Chat legal interactivo</h3>
+<div class="chat-box">
+  {% for qa in qa_history %}
+    <div class="chat-question"><strong>👤 Tú:</strong> {{ qa.question }}</div>
+    <div class="chat-answer"><strong>🤖 IA:</strong> {{ qa.answer }}</div>
+    <hr>
+  {% endfor %}
+</div>
 
-<h3>Resultado del análisis con IA:</h3>
-<pre>{{ contract.analysis_result }}</pre>
+<form method="post">
+  {% csrf_token %}
+  <input type="text" name="question" placeholder="Haz una pregunta sobre este contrato..." required>
+  <button type="submit">Enviar</button>
+</form>
