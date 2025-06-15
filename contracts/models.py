@@ -27,4 +27,17 @@ class Contract(models.Model):
     def __str__(self):
         return f"Contrato de {self.user.username} - {self.original_filename}"
 
+class ContractQuestion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='qas')
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'contract','created_at']),
+        ]
+
+    def __str__(self):
+        return f"Q&A de {self.user.username} para el contrato {self.contract.original_filename}"

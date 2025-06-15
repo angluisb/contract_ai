@@ -16,7 +16,7 @@ def extract_text_from_file(file):
     elif ext == '.pdf':
         return extract_text_from_pdf(file)
     else:
-        return "Formato no valido. SOlo PDF y DOCX"
+        return "Formato no valido. Solo PDF y DOCX"
 
 
 def extract_text_from_pdf(file):
@@ -66,5 +66,31 @@ def analyze_contract_text(text):
         return response.text
     except Exception as e:
         return f"Error al analizar el contrato: {e}"
+
+def answer_question(contract_text,question,chat_context=""):
+
+    genai.configure(api_key=settings.GOOGLE_AI_API_KEY)
+    model = genai.GenerativeModel("gemini-2.0-flash")
+
+    prompt = f"""
+    Estás actuando como un asistente legal inteligente.
+
+    Este es el contrato en discusión:
+    
+    {contract_text}
+    Aquí está el historial reciente de preguntas y respuestas con el usuario:
+    {chat_context}
+    Nueva pregunta del usuario:
+    {question}
+    Responde con claridad, lenguaje sencillo y estilo conversacional. Si no hay suficiente información en el contrato, acláralo.
+    """
+
+    try:
+        response = model.generate_content(prompt, generation_config=genai.GenerationConfig(temperature=0.2,
+                                                                                           max_output_tokens=1500))
+        return response.text
+    except Exception as e:
+        return f"Error al analizar el contrato: {e}"
+
 
 

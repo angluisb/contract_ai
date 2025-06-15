@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from setuptools.command.bdist_egg import analyze_egg
+from .utils import get_last_qa_context
 
 from contracts.forms import ContractForm
-from .models import Contract
-from ai_analysis.utils import extract_text_from_file, analyze_contract_text
+from .models import Contract, ContractQuestion
+from ai_analysis.utils import extract_text_from_file, analyze_contract_text, answer_question
 
 
 # Create your views here.
@@ -16,8 +17,6 @@ def upload_contract(request):
         if form.is_valid():
             contract = form.save(commit=False)
             contract.user = request.user
-            #contract.extracted_text = extract_text_from_file(contract.file)  # función que vamos a crear
-            #contract.analysis_result = analyze_contract_text(contract.extracted_text)  # IA
             contract.save()
             return redirect('contract_details', pk = contract.pk)
         else:
@@ -38,5 +37,18 @@ def contract_details(request, pk):
         contract.analysis_result = analyze_contract_text(contract.extracted_text)
         contract.save()
 
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        if question:
+            context = get_last_qa_context(contract, request.user)
+            answer =  answer_question(contract.extracted_text,question,context)
 
-    return render(request, 'contracts/detail.html', {'contract': contract})
+            ContractQuestion.objects.create(
+                contract=contract,
+                user=request.user,
+                question=question,
+                answer=answer
+            )
+    qa_history = ContractQuestion.objects.filter(contract=contract, user = request.user).order_by('-created_at')
+
+    return render(request, 'contracts/detail.html', {'contract': contract, 'qa_history': qa_history})
