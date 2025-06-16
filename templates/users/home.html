@@ -4,29 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'users/css/styles.css' %}" />
-    <title>Hi</title>
+    <title>Contract AI</title>
 </head>
 <body>
     <div class="container">
-        {% if user.is_authenticated %}
-            <div class="nav">
-                <div class="nav-der">
-                    <a href="{% url 'logout' %}" class="a-nav">Logout</a>
-                </div>
-                <div class="nav-izq">
-                    <ul class="nav-links">
-                    <li><a href="{% url 'upload_contract' %}" class="a-nav">Subir contrato</a></li>
-                    </ul>
-                </div>
+        <nav class="nav">
+            <div class="logo">ContractAI</div>
+                {% if user.is_authenticated %}
+                    <div class="nav-links">
+                        <a href="{% url 'logout' %}" class="a-nav">Logout</a>
+                    </div>
+        </nav>
         {% else %}
         {% endif %}
+        <section class="hero">
+                <h1>Analiza Contratos con IA</h1>
+                <p>Sube tu documento y obtén un análisis completo en segundos. Simple, rápido y preciso.</p>
+                <a href="{% url 'upload_contract' %}" class="a-button">Subir contrato</a>
+        </section>
+
+
+        <section class="features">
+            <h2>Como Funciona</h2>
+            <div class="features-grid">
+                <div class="feature">
+                     <div class="feature-icon">⚡</div>
+                    <h3>Análisis instantáneo</h3>
+                    <p>Procesamos tu contrato en menos de 30 segundos</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Detecta riesgos</h3>
+                    <p>Identifica cláusulas problemáticas automáticamente</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <h3>Explicaciones claras</h3>
+                    <p>Convierte jerga legal en lenguaje simple</p>
+                </div>
             </div>
+        </section>
 
-
-        <div class="message">
-        <h1>Hola {{ user.username }}</h1>
-        </div>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 ContractAI. Todos los derechos reservados.</p>
+            </div>
+        </footer>
     </div>
-
 </body>
 </html>

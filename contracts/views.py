@@ -49,6 +49,6 @@ def contract_details(request, pk):
                 question=question,
                 answer=answer
             )
-    qa_history = ContractQuestion.objects.filter(contract=contract, user = request.user).order_by('-created_at')
+    qa_history = ContractQuestion.objects.filter(contract=contract, user = request.user).order_by('created_at')
 
     return render(request, 'contracts/detail.html', {'contract': contract, 'qa_history': qa_history})

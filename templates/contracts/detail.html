@@ -1,17 +1,327 @@
-<h2>Análisis automático del contrato</h2>
-<p>{{ contract.analysis_result }}</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Contrato - ContractAI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<h3>Chat legal interactivo</h3>
-<div class="chat-box">
-  {% for qa in qa_history %}
-    <div class="chat-question"><strong>👤 Tú:</strong> {{ qa.question }}</div>
-    <div class="chat-answer"><strong>🤖 IA:</strong> {{ qa.answer }}</div>
-    <hr>
-  {% endfor %}
-</div>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
 
-<form method="post">
-  {% csrf_token %}
-  <input type="text" name="question" placeholder="Haz una pregunta sobre este contrato..." required>
-  <button type="submit">Enviar</button>
-</form>
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: #666;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #1a1a1a;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 80px 0;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.125rem;
+            margin-bottom: 64px;
+            text-align: center;
+        }
+
+        /* Analysis Section */
+        .analysis-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 48px;
+            border: 1px solid #e5e5e5;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .analysis-content {
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid #e5e5e5;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 48px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .chat-history {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 32px;
+            padding: 24px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .chat-message {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .chat-message:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .user-message .message-header {
+            color: #1a1a1a;
+        }
+
+        .ai-message .message-header {
+            color: #666;
+        }
+
+        .message-content {
+            color: #1a1a1a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-left: 24px;
+        }
+
+        /* Chat Form */
+        .chat-form {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #1a1a1a;
+        }
+
+        .chat-submit {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .chat-submit:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        /* Empty state */
+        .empty-chat {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main {
+                padding: 60px 0;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .analysis-section,
+            .chat-section {
+                padding: 32px 24px;
+            }
+
+            .chat-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chat-input {
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="logo">ContractAI</div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Inicio</a>
+                <a href="#logout" class="nav-link">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main">
+            <h1 class="page-title">Análisis de Contrato</h1>
+            <p class="page-subtitle">Revisa el análisis automático y haz preguntas específicas</p>
+
+            <!-- Analysis Section -->
+            <section class="analysis-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    Análisis automático del contrato
+                </h2>
+                <div class="analysis-content">
+                    {{ contract.analysis_result }}
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section class="chat-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💬</span>
+                    Chat legal interactivo
+                </h2>
+
+                <div class="chat-history">
+                    {% if qa_history %}
+                        {% for qa in qa_history %}
+                            <div class="chat-message user-message">
+                                <div class="message-header">
+                                    👤 Tú:
+                                </div>
+                                <div class="message-content">
+                                    {{ qa.question }}
+                                </div>
+                            </div>
+                            <div class="chat-message ai-message">
+                                <div class="message-header">
+                                    🤖 IA:
+                                </div>
+                                <div class="message-content">
+                                    {{ qa.answer }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-chat">
+                            No hay preguntas aún. ¡Haz tu primera pregunta sobre el contrato!
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post" class="chat-form">
+                    {% csrf_token %}
+                    <textarea
+                        name="question"
+                        class="chat-input"
+                        placeholder="Escribe tu pregunta sobre el contrato..."
+                        required
+                    ></textarea>
+                    <button type="submit" class="chat-submit">
+                        Enviar
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
