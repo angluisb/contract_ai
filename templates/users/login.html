@@ -1,7 +1,230 @@
-<h2>Iniciar sesión</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Entrar</button>
-</form>
-<a href="{% url 'register' %}">¿No tenés cuenta? Registrate</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - ContractAI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            padding: 0 24px;
+        }
+
+        /* Login Card */
+        .login-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 48px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Logo/Branding */
+        .brand {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .brand-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Form Title */
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        /* Form Styling */
+        form {
+            margin-bottom: 32px;
+        }
+
+        /* Form paragraphs */
+        form p {
+            margin-bottom: 24px;
+        }
+
+        /* Labels */
+        form label {
+            display: block;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Input fields */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background-color: #fafafa;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            background-color: white;
+        }
+
+        /* Error messages */
+        .errorlist {
+            list-style: none;
+            margin: 8px 0 0 0;
+        }
+
+        .errorlist li {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        /* Submit button */
+        button[type="submit"] {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        /* Register link */
+        .register-link {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .register-link a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .register-link a:hover {
+            color: #666;
+        }
+
+        /* Help text */
+        .helptext {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .login-card {
+                padding: 32px 24px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .brand {
+                margin-bottom: 32px;
+            }
+        }
+
+        /* Small screens */
+        @media (max-width: 480px) {
+            body {
+                align-items: flex-start;
+                padding-top: 40px;
+            }
+
+            .login-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <!-- Branding -->
+            <div class="brand">
+                <div class="logo">ContractAI</div>
+                <div class="brand-subtitle">Análisis inteligente de contratos</div>
+            </div>
+
+            <!-- Form Title -->
+            <h2>Iniciar sesión</h2>
+
+            <!-- Login Form -->
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button type="submit">Entrar</button>
+            </form>
+
+            <!-- Register Link -->
+            <div class="register-link">
+                <a href="{% url 'register' %}">¿No tenés cuenta? Registrate</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
