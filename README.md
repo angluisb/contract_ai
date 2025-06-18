@@ -74,22 +74,22 @@ Esta herramienta está diseñada para resolver dos grandes problemas:
 ---
 
 ## 📄 Variables de entorno
-Crea un archivo .env en la raíz del proyecto con el siguiente contenido:
-```python
-  DB_NAME=
-  DB_USER=
-  DB_PASSWORD=
-  DB_HOST=
-  DB_PORT=
-  GOOGLE_AI_API_KEY=
-```
+   Crea un archivo .env en la raíz del proyecto con el siguiente contenido:
+   ```python
+     DB_NAME=
+     DB_USER=
+     DB_PASSWORD=
+     DB_HOST=
+     DB_PORT=
+     GOOGLE_AI_API_KEY=
+   ```
   ---
 
-## 📜 Licencia
-Este proyecto está bajo la licencia MIT.
+##  📜 Licencia
+   Este proyecto está bajo la licencia MIT.
    ---
 
 ## 👤 Créditos
-Desarrollado por Ángel Bracamonte
-GitHub: @angluisb
+   Desarrollado por Ángel Bracamonte
+   GitHub: @angluisb
 ---
