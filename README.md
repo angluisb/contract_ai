@@ -87,9 +87,9 @@ Crea un archivo .env en la raíz del proyecto con el siguiente contenido:
 
 ## 📜 Licencia
 Este proyecto está bajo la licencia MIT.
----
+   ---
 
 ## 👤 Créditos
-Desarrollado por Ángel Murillo
+Desarrollado por Ángel Bracamonte
 GitHub: @angluisb
 ---
