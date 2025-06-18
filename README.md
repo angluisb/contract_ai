@@ -86,7 +86,7 @@ Esta herramienta está diseñada para resolver dos grandes problemas:
   ---
 
 ##  📜 Licencia
-   Este proyecto está bajo la licencia MIT.
+   Este proyecto esta bajo la licencia MIT.
    ---
 
 ## 👤 Créditos
